@@ -21,6 +21,13 @@
 
         </activity>
 
+        <service
+            android:name=".PetService"
+            android:exported="false" />
+
     </application>
 
 </manifest>
+<service
+    android:name=".PetService"
+    android:exported="false" />
