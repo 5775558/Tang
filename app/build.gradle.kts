@@ -1,4 +1,3 @@
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -21,7 +20,12 @@ android {
         applicationId = "com.tangyuanlongniang.pet"
         minSdk = 23
         targetSdk = 28
-        versionCode = 3
-        versionName = "1.2"
+        versionCode = 4
+        versionName = "1.3"
     }
+}
+
+dependencies {
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("androidx.core:core-ktx:1.13.1")
 }
