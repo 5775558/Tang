@@ -1,4 +1,3 @@
-
 package com.tangyuanlongniang.pet
 
 import android.app.Service
@@ -13,9 +12,9 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import kotlin.math.abs
 
 class PetService : Service() {
@@ -55,7 +54,10 @@ class PetService : Service() {
         return START_NOT_STICKY
     }
 
-    private fun background(color: Int, radius: Float): GradientDrawable {
+    private fun background(
+        color: Int,
+        radius: Float
+    ): GradientDrawable {
         return GradientDrawable().apply {
             setColor(color)
             cornerRadius = radius
@@ -63,19 +65,24 @@ class PetService : Service() {
         }
     }
 
-    private fun makeAvatar(): TextView {
-        return TextView(this).apply {
-            text = "🐉"
-            textSize = 30f
-            gravity = Gravity.CENTER
-            setTextColor(Color.rgb(100, 55, 35))
-            background = background(Color.rgb(255, 240, 230), 1000f)
+    private fun makeAvatar(): ImageView {
+        return ImageView(this).apply {
+            setImageResource(
+                R.drawable.file_00000000954481f5a909b4bf0ebbc1c7
+            )
+            scaleType = ImageView.ScaleType.CENTER_CROP
+            background = this@PetService.background(
+                Color.rgb(255, 240, 230),
+                1000f
+            )
+            clipToOutline = true
             elevation = 8f
         }
     }
 
     private fun install(view: View) {
         val old = petView
+
         if (old != null) {
             try {
                 wm.removeView(old)
@@ -110,7 +117,9 @@ class PetService : Service() {
                     val dx = event.rawX - touchX
                     val dy = event.rawY - touchY
 
-                    if (abs(dx) > 8 || abs(dy) > 8) moved = true
+                    if (abs(dx) > 8 || abs(dy) > 8) {
+                        moved = true
+                    }
 
                     params.x = startX + dx.toInt()
                     params.y = startY + dy.toInt()
@@ -141,13 +150,15 @@ class PetService : Service() {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
             setPadding(10, 8, 8, 8)
-            background = background(
-                Color.rgb(255, 245, 235), 36f
+            background = this@PetService.background(
+                Color.rgb(255, 245, 235),
+                36f
             )
             elevation = 8f
         }
 
         val avatar = makeAvatar()
+
         root.addView(
             avatar,
             LinearLayout.LayoutParams(76, 76)
@@ -186,8 +197,8 @@ class PetService : Service() {
         root.addView(hideButton)
         install(root)
 
-        avatar.setOnTouchListener { _, event ->
-            handleAvatarDrag(avatar, event)
+        avatar.setOnTouchListener { view, event ->
+            handleAvatarDrag(view, event)
         }
     }
 
@@ -195,28 +206,27 @@ class PetService : Service() {
         view: View,
         event: MotionEvent
     ): Boolean {
-        var startX = 0
-        var startY = 0
         return when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                startX = params.x
-                startY = params.y
                 view.tag = floatArrayOf(
                     event.rawX,
                     event.rawY,
-                    startX.toFloat(),
-                    startY.toFloat()
+                    params.x.toFloat(),
+                    params.y.toFloat()
                 )
                 true
             }
 
             MotionEvent.ACTION_MOVE -> {
                 val data = view.tag as? FloatArray
+
                 if (data != null) {
                     params.x = data[2].toInt() +
                         (event.rawX - data[0]).toInt()
+
                     params.y = data[3].toInt() +
                         (event.rawY - data[1]).toInt()
+
                     try {
                         wm.updateViewLayout(petView, params)
                     } catch (_: Exception) {
@@ -224,6 +234,8 @@ class PetService : Service() {
                 }
                 true
             }
+
+            MotionEvent.ACTION_UP -> true
 
             else -> true
         }
@@ -233,8 +245,16 @@ class PetService : Service() {
         collapsed = true
 
         val avatar = makeAvatar()
-        avatar.layoutParams = LinearLayout.LayoutParams(64, 64)
+
         install(avatar)
+
+        avatar.layoutParams = WindowManager.LayoutParams(
+            64,
+            64,
+            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+            PixelFormat.TRANSLUCENT
+        )
     }
 
     override fun onDestroy() {
@@ -244,6 +264,7 @@ class PetService : Service() {
             } catch (_: Exception) {
             }
         }
+
         petView = null
         super.onDestroy()
     }
