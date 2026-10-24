@@ -1,27 +1,41 @@
-<?xml version="1.0" encoding="utf-8"?><manifest xmlns:android="http://schemas.android.com/apk/res/android"><uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-<application
-    android:allowBackup="true"
-    android:label="汤圆龙娘桌宠"
-    android:theme="@android:style/Theme.Material.Light.NoActionBar"
-    android:supportsRtl="true">
+    <!-- 网络权限：用于连接 DeepSeek -->
+    <uses-permission android:name="android.permission.INTERNET" />
 
-    <activity
-        android:name=".MainActivity"
+    <!-- 悬浮窗权限 -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <application
+        android:allowBackup="true"
         android:label="汤圆龙娘桌宠"
-        android:exported="true">
+        android:theme="@android:style/Theme.Material.Light.NoActionBar"
+        android:supportsRtl="true">
 
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+        <!-- 桌宠主界面 -->
+        <activity
+            android:name=".MainActivity"
+            android:label="汤圆龙娘桌宠"
+            android:exported="true">
 
-    </activity>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
-    <service
-        android:name=".PetService"
-        android:exported="false" />
+        </activity>
 
-</application>
+        <!-- 龙娘聊天页面 -->
+        <activity
+            android:name=".ChatActivity"
+            android:exported="false" />
+
+        <!-- 悬浮桌宠服务 -->
+        <service
+            android:name=".PetService"
+            android:exported="false" />
+
+    </application>
 
 </manifest>
