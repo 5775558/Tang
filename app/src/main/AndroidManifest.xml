@@ -1,10 +1,8 @@
+
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- 网络权限：用于连接 DeepSeek -->
     <uses-permission android:name="android.permission.INTERNET" />
-
-    <!-- 悬浮窗权限 -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
@@ -13,7 +11,6 @@
         android:theme="@android:style/Theme.Material.Light.NoActionBar"
         android:supportsRtl="true">
 
-        <!-- 桌宠主界面 -->
         <activity
             android:name=".MainActivity"
             android:label="汤圆龙娘桌宠"
@@ -26,16 +23,13 @@
 
         </activity>
 
-        <!-- 龙娘聊天页面 -->
         <activity
             android:name=".ChatActivity"
             android:exported="false" />
 
-        <!-- 悬浮桌宠服务 -->
         <service
             android:name=".PetService"
             android:exported="false" />
 
     </application>
-
 </manifest>
